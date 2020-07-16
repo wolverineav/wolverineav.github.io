@@ -2,40 +2,40 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on wolverineav</title>
-    <link>https://wolverineav.github.io/tags/</link>
+    <link>https://wolverineav.blog/tags/</link>
     <description>Recent content in Tags on wolverineav</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© {year}</copyright>
     <lastBuildDate>Tue, 14 Jul 2020 18:08:16 -0700</lastBuildDate>
     
-	<atom:link href="https://wolverineav.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://wolverineav.blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>scale</title>
-      <link>https://wolverineav.github.io/tags/scale/</link>
+      <link>https://wolverineav.blog/tags/scale/</link>
       <pubDate>Tue, 14 Jul 2020 18:08:16 -0700</pubDate>
       
-      <guid>https://wolverineav.github.io/tags/scale/</guid>
+      <guid>https://wolverineav.blog/tags/scale/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tech</title>
-      <link>https://wolverineav.github.io/tags/tech/</link>
+      <link>https://wolverineav.blog/tags/tech/</link>
       <pubDate>Tue, 14 Jul 2020 18:08:16 -0700</pubDate>
       
-      <guid>https://wolverineav.github.io/tags/tech/</guid>
+      <guid>https://wolverineav.blog/tags/tech/</guid>
       <description></description>
     </item>
     
     <item>
       <title>personal</title>
-      <link>https://wolverineav.github.io/tags/personal/</link>
+      <link>https://wolverineav.blog/tags/personal/</link>
       <pubDate>Sun, 12 Jul 2020 18:03:24 -0700</pubDate>
       
-      <guid>https://wolverineav.github.io/tags/personal/</guid>
+      <guid>https://wolverineav.blog/tags/personal/</guid>
       <description></description>
     </item>
     
