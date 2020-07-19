@@ -164,10 +164,8 @@ with approach 1; to import all the certificates into the broker truststore, you
 would need to keep track of the total size of all the certificates combined.
 Let me will elaborate <em>why</em> in the next section.</p>
 <h3 id="ssltls-handshake">SSL/TLS Handshake<a class="anchor" href="#ssltls-handshake">#</a></h3>
-<p>The TCP layer equivalent of SSL is TLS - which handles the handshake. As part
-of the TLS protocol,
-<cite>a handshake consists of the steps explained here. <sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></cite></p>
-<p><img src="/img/kafka-tls-record-size-exceeded/tls-handshake.svg" alt="TLS handshake protocol"></p>
+<p>The TCP layer equivalent of SSL is TLS - which handles the handshake.</p>
+<p><img src="/img/kafka-tls-record-size-exceeded/tls-handshake.svg" alt="TLS handshake protocol"><em>TLS handshake protocol. More details <cite>here: <sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></cite></em></p>
 <p>Of special note is the <code>Certificate Request</code> step described in detail in the
 <cite>TLS RFC-5246 <sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup></cite> - it is an optional step, to
 send the list of known CAs to the client. This is to help client identify which
