@@ -115,15 +115,15 @@ if (!doNotTrack) {
           <article class="post__content">
               
 <h2 id="pre-requisites">Pre-requisites<a class="anchor" href="#pre-requisites">#</a></h2>
-<p>This post assumes you know what is TLS, keystore, truststore, how they all
-mingle together in the context of a specific service.</p>
+<p>This post assumes you know what is SSL, TLS, keystore, truststore and  how they
+all mingle together in the context of a specific service.</p>
 <p>The problem described is in the context of Kafka, but may happen with other web
 services using TLS as well. The fix may be similar, but you would have to make
-the trade-off of whether it is acceptable for your service clients :)</p>
+the trade-off of whether it is acceptable for your service clients.</p>
 <h2 id="problem">Problem<a class="anchor" href="#problem">#</a></h2>
 <h3 id="kafka-clients-are-unable-to-connect-to-the-broker">Kafka clients are unable to connect to the broker<a class="anchor" href="#kafka-clients-are-unable-to-connect-to-the-broker">#</a></h3>
-<p>I observed a strange behaviour in our scale test - after a sync of all the
-client self-signed certificates to the broker truststore, none of the clients
+<p>We observed a strange behaviour in our scale test - after a sync of all the
+client <em>self-signed</em> certificates to the broker truststore, none of the clients
 were able to connect.</p>
 <p>Kafka&rsquo;s <code>server.log</code> would show that is awaiting socket connections as the last
 log line:</p>
@@ -146,31 +146,30 @@ Jul 02 16:13:11 broker kafka[10663]:         at kafka.server.KafkaServerStartabl
 Jul 02 16:13:11 broker kafka[10663]:         at kafka.Kafka$.main(Kafka.scala:84)
 Jul 02 16:13:11 broker kafka[10663]:         at kafka.Kafka.main(Kafka.scala)
 </code></pre>
-<p>This led me to the next part - of understanding the handshake process of SSL/TLS.</p>
+<p>This led us to the next part - of understanding the handshake process of SSL/TLS.</p>
 <h3 id="kafka-and-ssl">Kafka and SSL<a class="anchor" href="#kafka-and-ssl">#</a></h3>
-<p>Kafka has a couple of ways managing truststore when SSL is enabled
-[<a href="https://docs.confluent.io/current/kafka/authentication_ssl.html">1</a>].</p>
+<p>Kafka has <cite>a couple of ways of managing truststore <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></cite> when SSL is
+enabled.</p>
 <ol>
 <li>The truststore contains one or many certificates: the broker or logical
-client will trust any certificate listed in the truststore.</li>
+client will trust <em>any certificate listed in the truststore</em>.</li>
 <li>The truststore contains a Certificate Authority (CA): the broker or logical
-client will trust any certificate that was signed by the CA in the truststore.
-Described with a diagram here
-[<a href="https://github.com/confluentinc/confluent-platform-security-tools/blob/master/single-trust-store-diagram.pdf">2</a>].</li>
+client will trust <em>any certificate that was signed by the CA in the truststore</em>.
+Described in a diagram <cite>here.<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></cite></li>
 </ol>
-<p>With the approach described in point 2, you are probably handling a handful of
-certificates at most.</p>
-<p>On the off chance that all your clients use self-signed certificate and you
-import all the certificates into the broker truststore, you probably need to
-keep track of the total size of all the certificates combined. I will
-elaborate why in the next section.</p>
+<p>With the approach described in point 2, you are most likely to have a handful
+of certificates in the truststore.</p>
+<p>On the off chance that all your clients use self-signed certificate and you go
+with approach 1; to import all the certificates into the broker truststore, you
+would need to keep track of the total size of all the certificates combined.
+Let me will elaborate <em>why</em> in the next section.</p>
 <h3 id="ssltls-handshake">SSL/TLS Handshake<a class="anchor" href="#ssltls-handshake">#</a></h3>
 <p>The TCP layer equivalent of SSL is TLS - which handles the handshake. As part
-of the TLS protocol, a handshake consists of the steps explained here
-[<a href="https://hpbn.co/transport-layer-security-tls/">3</a>].</p>
+of the TLS protocol,
+<cite>a handshake consists of the steps explained here. <sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></cite></p>
 <p><img src="/img/kafka-tls-record-size-exceeded/tls-handshake.svg" alt="TLS handshake protocol"></p>
-<p>Of special note is the <em>Certificate Request</em> step
-[<a href="https://tools.ietf.org/html/rfc5246#page-53">4</a>] - it is an optional step, to
+<p>Of special note is the <code>Certificate Request</code> step described in detail in the
+<cite>TLS RFC-5246 <sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup></cite> - it is an optional step, to
 send the list of known CAs to the client. This is to help client identify which
 certificate to send during the handshake; in case it has multiple certs signed
 by different certificate authorities.</p>
@@ -185,18 +184,18 @@ itself would get stuck at the sending of <code>certificate_authorities</code> st
 <p>Key thing to notice here is that the sending of <code>certificate_authorities</code> is an
 optional step. Depending on your use case, you may be fine with skipping that
 step.</p>
-<p>In my case, I knew all the client were on the internal subnet, they all used
-self-signed certificate and they would always have one and only one certificate
-as its identity. So there will not be disambiguity about which certificate to
-send based on the known CA list.</p>
-<p>So I could unilaterally decide to skip the optional step. But how do we do that
-exactly?</p>
+<p>In my case, we knew all the client were on the internal subnet, they all used
+self-signed certificate and they would always have <em>one and only one</em>
+certificate as its identity. There will not be ambiguity at the client side
+about which certificate to send based on the known CA certificates list.</p>
+<p>So we could unilaterally decide to skip the optional step; YMMV. But how do we
+do that exactly?</p>
 <h2 id="solution">Solution<a class="anchor" href="#solution">#</a></h2>
 <h3 id="kip-519-make-ssl-contextengine-configuration-extensible">KIP-519 Make SSL context/engine configuration extensible<a class="anchor" href="#kip-519-make-ssl-contextengine-configuration-extensible">#</a></h3>
 <p>Luckily, the developers of Kafka were aware of this requirement based on growing
-use cases in matured enterprise environments. They already had a feature in
-the works, which was not released yet, but was available if you built a
-Kafka distribution from the trunk branch on <em>git</em>.</p>
+use cases in matured enterprise environments. They already had <cite>a feature in
+the works <sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup></cite>, which was not released yet, but was available if you
+built a Kafka distribution from git.</p>
 <pre><code class="language-java">diff --git a/clients/src/main/java/org/apache/kafka/common/security/ssl/DefaultSslEngineFactory.java b/clients/src/main/java/org/apache/kafka/common/security/ssl/DefaultSslEn
 gineFactory.java
 index f71adaf62..82ce12811 100644
@@ -223,10 +222,9 @@ index f71adaf62..82ce12811 100644
                      keystore, truststore, sslContext.getProvider().getName());
              return sslContext;
 </code></pre>
-<p>All I wanted to do was override the default TrustManager with my custom
-TrustManager. This is well documented and explained in the Java Secure Socket
-Extension (JSSE) reference guide
-[<a href="https://docs.oracle.com/en/java/javase/11/security/java-secure-socket-extension-jsse-reference-guide.html#GUID-E1205974-3249-4E40-83C0-5F89C7375CF4">5</a>].</p>
+<p>The goal was to override the default TrustManager with our custom TrustManager.
+This is well documented and explained in the Java Secure Socket Extension
+(JSSE) <cite>reference guide. <sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup></cite></p>
 <h3 id="my509trustmanager">My509TrustManager<a class="anchor" href="#my509trustmanager">#</a></h3>
 <pre><code class="language-java">public class MyX509TrustManager implements X509TrustManager {
     /*
@@ -286,18 +284,38 @@ Extension (JSSE) reference guide
 <p>Build Kafka, deploy it as the broker and watch clients connect without the
 broker getting stuck during SSL/TLS handshake.</p>
 <h2 id="thanks">Thanks<a class="anchor" href="#thanks">#</a></h2>
-<p>The whole search for root cause was a slow moving train that gained speed with
+<p>The whole search for root cause was a slow-moving train that gained speed with
 help from some clever folks. <a href="https://bitmingw.com">Ming Wen</a> helped identify
-where Kafka was getting stuck and Mark Boon, our in house X509 certificate
-expert suggested how to approach the problem with a custom TrustManager.</p>
+where Kafka was getting stuck and
+<a href="http://linkedin.com/in/mark-boon-738abb8">Mark Boon</a>, our in house X509
+certificate expert suggested how to approach the problem with a custom
+TrustManager.</p>
 <p>Being in the platform engineering team, I&rsquo;m usually the one connecting the
-dots/teams/modules and figuring out where is the ideal place to fix it 🙂</p>
+dots/teams/modules and figuring out where is the ideal place to fix it.</p>
 <p><strong>TIL</strong></p>
-<p>[1] <a href="https://docs.confluent.io/current/kafka/authentication_ssl.html">https://docs.confluent.io/current/kafka/authentication_ssl.html</a></p>
-<p>[2] <a href="https://github.com/confluentinc/confluent-platform-security-tools/blob/master/single-trust-store-diagram.pdf">https://github.com/confluentinc/confluent-platform-security-tools/blob/master/single-trust-store-diagram.pdf</a></p>
-<p>[3] <a href="https://hpbn.co/transport-layer-security-tls/">https://hpbn.co/transport-layer-security-tls/</a></p>
-<p>[4] <a href="https://tools.ietf.org/html/rfc5246#page-53">https://tools.ietf.org/html/rfc5246#page-53</a></p>
-<p>[5] <a href="https://docs.oracle.com/en/java/javase/11/security/java-secure-socket-extension-jsse-reference-guide.html#GUID-E1205974-3249-4E40-83C0-5F89C7375CF4">https://docs.oracle.com/en/java/javase/11/security/java-secure-socket-extension-jsse-reference-guide.html#GUID-E1205974-3249-4E40-83C0-5F89C7375CF4</a></p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://docs.confluent.io/current/kafka/authentication_ssl.html">https://docs.confluent.io/current/kafka/authentication_ssl.html</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://github.com/confluentinc/confluent-platform-security-tools/blob/master/single-trust-store-diagram.pdf">https://github.com/confluentinc/confluent-platform-security-tools/blob/master/single-trust-store-diagram.pdf</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a href="https://hpbn.co/transport-layer-security-tls/">https://hpbn.co/transport-layer-security-tls/</a> <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4" role="doc-endnote">
+<p><a href="https://tools.ietf.org/html/rfc5246#page-53">https://tools.ietf.org/html/rfc5246#page-53</a> <a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5" role="doc-endnote">
+<p><a href="https://github.com/apache/kafka/pull/8338">https://github.com/apache/kafka/pull/8338</a> <a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:6" role="doc-endnote">
+<p><a href="https://docs.oracle.com/en/java/javase/11/security/java-secure-socket-extension-jsse-reference-guide.html#GUID-E1205974-3249-4E40-83C0-5F89C7375CF4">https://docs.oracle.com/en/java/javase/11/security/java-secure-socket-extension-jsse-reference-guide.html#GUID-E1205974-3249-4E40-83C0-5F89C7375CF4</a> <a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
 
 
               
@@ -311,6 +329,15 @@ dots/teams/modules and figuring out where is the ideal place to fix it 🙂</p>
     </li>
     <li class="tag__item">
         <a class="tag__link" href="https://wolverineav.blog/tags/scale/">scale</a>
+    </li>
+    <li class="tag__item">
+        <a class="tag__link" href="https://wolverineav.blog/tags/kafka/">kafka</a>
+    </li>
+    <li class="tag__item">
+        <a class="tag__link" href="https://wolverineav.blog/tags/ssl/">ssl</a>
+    </li>
+    <li class="tag__item">
+        <a class="tag__link" href="https://wolverineav.blog/tags/tls/">tls</a>
     </li></ul>
 
  <div class="pagination">

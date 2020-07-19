@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tech on wolverineav</title>
-    <link>https://wolverineav.blog/tech/</link>
-    <description>Recent content in Tech on wolverineav</description>
+    <title>ssl on wolverineav</title>
+    <link>https://wolverineav.blog/tags/ssl/</link>
+    <description>Recent content in ssl on wolverineav</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© {year}</copyright>
     <lastBuildDate>Tue, 14 Jul 2020 18:08:16 -0700</lastBuildDate>
     
-	<atom:link href="https://wolverineav.blog/tech/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://wolverineav.blog/tags/ssl/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -21,18 +21,6 @@
       <description>Pre-requisites This post assumes you know what is SSL, TLS, keystore, truststore and how they all mingle together in the context of a specific service.
 The problem described is in the context of Kafka, but may happen with other web services using TLS as well. The fix may be similar, but you would have to make the trade-off of whether it is acceptable for your service clients.
 Problem Kafka clients are unable to connect to the broker We observed a strange behaviour in our scale test - after a sync of all the client self-signed certificates to the broker truststore, none of the clients were able to connect.</description>
-    </item>
-    
-    <item>
-      <title>Introduction</title>
-      <link>https://wolverineav.blog/tech/introduction/</link>
-      <pubDate>Sun, 12 Jul 2020 18:03:24 -0700</pubDate>
-      
-      <guid>https://wolverineav.blog/tech/introduction/</guid>
-      <description>I treat software development with the same approach that Don Norman would apply to everyday things 🙃
-am eccentric at times, but could never match Bryan Cantrill. the Illumos talk at LISA11 will forever be etched in my memory
-a software developer
-Chomsky reader</description>
     </item>
     
   </channel>

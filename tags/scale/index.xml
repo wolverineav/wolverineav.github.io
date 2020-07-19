@@ -18,9 +18,9 @@
       <pubDate>Tue, 14 Jul 2020 18:08:16 -0700</pubDate>
       
       <guid>https://wolverineav.blog/tech/kafka-tls-record-size-exceeded/</guid>
-      <description>Pre-requisites This post assumes you know what is TLS, keystore, truststore, how they all mingle together in the context of a specific service.
-The problem described is in the context of Kafka, but may happen with other web services using TLS as well. The fix may be similar, but you would have to make the trade-off of whether it is acceptable for your service clients :)
-Problem Kafka clients are unable to connect to the broker I observed a strange behaviour in our scale test - after a sync of all the client self-signed certificates to the broker truststore, none of the clients were able to connect.</description>
+      <description>Pre-requisites This post assumes you know what is SSL, TLS, keystore, truststore and how they all mingle together in the context of a specific service.
+The problem described is in the context of Kafka, but may happen with other web services using TLS as well. The fix may be similar, but you would have to make the trade-off of whether it is acceptable for your service clients.
+Problem Kafka clients are unable to connect to the broker We observed a strange behaviour in our scale test - after a sync of all the client self-signed certificates to the broker truststore, none of the clients were able to connect.</description>
     </item>
     
   </channel>
