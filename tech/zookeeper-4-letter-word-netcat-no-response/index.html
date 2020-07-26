@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <title>Zookeeper 4 Letter Word Netcat No Response | wolverineav</title>
+
+  <meta charset="UTF-8">
+  <meta name="language" content="en">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  
+  
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Zookeeper 4 Letter Word Netcat No Response" />
+  <meta name="twitter:description" content=""
+  />
+  <meta name="twitter:site" content="@https://twitter.com/wolverineav" />
+  <meta name="twitter:creator" content="@https://twitter.com/wolverineav" />
+  
+
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
+
+  
+  
+    
+ 
+  
+  
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="/css/post.min.679ea46872c2b319c5ae942c601a7330924fd57451c89d621d6cb129c870c2a8.css" integrity="sha256-Z56kaHLCsxnFrpQsYBpzMJJP1XRRyJ1iHWyxKchwwqg="/>
+  
+    
+    <link rel="stylesheet" href="/css/custom.min.85cb2141d4ab47ef47fcb7f0a0a6e05a30fb0974a7d9ccede1cd0e97e2562089.css" integrity="sha256-hcshQdSrR&#43;9H/LfwoKbgWjD7CXSn2czt4c0Ol&#43;JWIIk="/>
+  
+  
+   
+   
+    
+
+<script type="application/ld+json">
+  
+    { 
+      "@context": "http://schema.org", 
+      "@type": "WebSite", 
+      "url": "https:\/\/wolverineav.blog\/tech\/zookeeper-4-letter-word-netcat-no-response\/",
+      "name": "Zookeeper 4 Letter Word Netcat No Response",
+      "author": {
+        "@type": "Person",
+        "name": ""
+      },
+      "description": ""
+    }
+  
+  </script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-172766817-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</head>
+
+<body>
+  <div class="burger__container">
+  <div class="burger" aria-controls="navigation" aria-label="Menu">
+    <div class="burger__meat burger__meat--1"></div>
+    <div class="burger__meat burger__meat--2"></div>
+    <div class="burger__meat burger__meat--3"></div>
+  </div>
+</div>
+ 
+
+  <nav class="nav" role="navigation">
+  <ul class="nav__list">
+    
+    
+      <li>
+        <a  href="/">about</a>
+      </li>
+    
+      <li>
+        <a  class="active"
+         href="/tech">tech</a>
+      </li>
+    
+  </ul>
+</nav>
+
+
+  <main>
+    
+    
+
+    <div class="flex-wrapper">
+      <div class="post__container">
+        <div class="post">
+          <header class="post__header">
+            <h1 id="post__title">Zookeeper 4 Letter Word Netcat No Response</h1>
+            <time datetime="2020-07-24 16:20:00 -0700 PDT" class="post__date"
+            >24 Jul 2020</time>
+          </header>
+          <article class="post__content">
+              
+<h1 id="problem">Problem</h1>
+<p>To report Zookeeper service health, we use the 4 letter word (<em>4LW</em>) command
+<code>ruok</code> and check that response is <code>imok</code>.</p>
+<p><code>netcat</code> is the channel via which the message is
+sent.</p>
+<p>After upgrading the operating system from Ubuntu <code>16.04</code> to <code>18.04</code>, we see that
+intermittently there is no response. Hmm&hellip;</p>
+<h1 id="triage">Triage</h1>
+<h2 id="is-zookeeper-getting-those-commands">Is Zookeeper getting those commands?<a class="anchor" href="#is-zookeeper-getting-those-commands">#</a></h2>
+<p>A simple bash script can be used to verify this:</p>
+<pre><code class="language-bash">#!/bin/bash
+
+for i in {1..10}
+do
+  status=$(echo &quot;ruok&quot; | nc localhost 2181)
+  echo -e &quot;try ${i}: ${status}&quot;
+done
+</code></pre>
+<p>Output looks suspect:</p>
+<pre><code class="language-bash">root@zk-node:~# ./check_zk.sh
+try 1: imok
+try 2: imok
+try 3: imok
+try 4: imok
+try 5: imok
+try 6:
+try 7: imok
+try 8:
+try 9: imok
+try 10: imok
+root@zk-node:~#
+</code></pre>
+<p>But Zookeeper service has no issues processing the requests:</p>
+<pre><code class="language-bash">Jul 24 22:21:07 zk-node zookeeper[23515]: 2020-07-24 22:21:07,054 [myid:] - INFO  [NIOWorkerThread-31:NIOServerCnxn@507] - Processing ruok command from /127.0.0.1:49880
+Jul 24 22:21:07 zk-node zookeeper[23515]: 2020-07-24 22:21:07,091 [myid:] - INFO  [NIOWorkerThread-22:NIOServerCnxn@507] - Processing ruok command from /127.0.0.1:49882
+Jul 24 22:21:07 zk-node zookeeper[23515]: 2020-07-24 22:21:07,110 [myid:] - INFO  [NIOWorkerThread-20:NIOServerCnxn@507] - Processing ruok command from /127.0.0.1:49884
+Jul 24 22:21:07 zk-node zookeeper[23515]: 2020-07-24 22:21:07,125 [myid:] - INFO  [NIOWorkerThread-4:NIOServerCnxn@507] - Processing ruok command from /127.0.0.1:49886
+Jul 24 22:21:07 zk-node zookeeper[23515]: 2020-07-24 22:21:07,139 [myid:] - INFO  [NIOWorkerThread-3:NIOServerCnxn@507] - Processing ruok command from /127.0.0.1:49888
+Jul 24 22:21:07 zk-node zookeeper[23515]: 2020-07-24 22:21:07,153 [myid:] - INFO  [NIOWorkerThread-1:NIOServerCnxn@507] - Processing ruok command from /127.0.0.1:49890
+Jul 24 22:21:07 zk-node zookeeper[23515]: 2020-07-24 22:21:07,166 [myid:] - INFO  [NIOWorkerThread-23:NIOServerCnxn@507] - Processing ruok command from /127.0.0.1:49892
+Jul 24 22:21:07 zk-node zookeeper[23515]: 2020-07-24 22:21:07,179 [myid:] - INFO  [NIOWorkerThread-11:NIOServerCnxn@507] - Processing ruok command from /127.0.0.1:49894
+Jul 24 22:21:07 zk-node zookeeper[23515]: 2020-07-24 22:21:07,190 [myid:] - INFO  [NIOWorkerThread-9:NIOServerCnxn@507] - Processing ruok command from /127.0.0.1:49896
+Jul 24 22:21:07 zk-node zookeeper[23515]: 2020-07-24 22:21:07,201 [myid:] - INFO  [NIOWorkerThread-5:NIOServerCnxn@507] - Processing ruok command from /127.0.0.1:49898
+</code></pre>
+<p>No errors or warnings or exceptions. Looks like it is responding just fine.</p>
+<h2 id="4lw-commands-do-not-work-consistently">4LW commands do not work consistently<a class="anchor" href="#4lw-commands-do-not-work-consistently">#</a></h2>
+<p>Next, we tried looking for various causes that result in 4LW commands silently
+failing.
+Bumped into this known Zookeeper issue
+<cite>ZOOKEEPER-737: some 4 letter words may fail with netcat (nc) <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></cite>.</p>
+<p>Now we did not observe any exceptions in ZK logs - probably because we&rsquo;re
+using a later version of ZK - <code>v3.6.1</code>. But it does seem like a plausible
+root cause.</p>
+<p>A <cite>StackOverflow post <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></cite> points to the same with a fix to add
+delay in netcat before closing the channel.</p>
+<h1 id="solution">Solution</h1>
+<h2 id="add-delay-to-netcat-before-closing-the-channel">Add delay to netcat before closing the channel<a class="anchor" href="#add-delay-to-netcat-before-closing-the-channel">#</a></h2>
+<p>Based on the <cite>StackOverflow post <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></cite>, we added the <code>-q 1</code> flag;
+which adds a 1 second delay after sending the message and before it closes
+the channel.</p>
+<h3 id="result">Result?<a class="anchor" href="#result">#</a></h3>
+<pre><code class="language-bash"># status=$(echo &quot;ruok&quot; | nc localhost 2181 -q 1)
+
+root@zk-node:~# ./check_zk.sh
+try 1: imok
+try 2: imok
+try 3: imok
+try 4: imok
+try 5: imok
+try 6: imok
+try 7: imok
+try 8: imok
+try 9: imok
+try 10: imok
+root@zk-node:~#
+</code></pre>
+<p>Consistency at last!</p>
+<p>The goal of any platform - it works or it doesn&rsquo;t; either is fine, as long as
+it does that consistently.</p>
+<p><strong>TIL</strong></p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-737">https://issues.apache.org/jira/browse/ZOOKEEPER-737</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://stackoverflow.com/questions/26182416/zookeeper-server-started-but-ruok-no-output">https://stackoverflow.com/questions/26182416/zookeeper-server-started-but-ruok-no-output</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+              
+          </article>
+          
+
+<ul class="tags__list">
+    
+    <li class="tag__item">
+        <a class="tag__link" href="https://wolverineav.blog/tags/tech/">tech</a>
+    </li>
+    <li class="tag__item">
+        <a class="tag__link" href="https://wolverineav.blog/tags/quickie/">quickie</a>
+    </li>
+    <li class="tag__item">
+        <a class="tag__link" href="https://wolverineav.blog/tags/zookeeper/">zookeeper</a>
+    </li>
+    <li class="tag__item">
+        <a class="tag__link" href="https://wolverineav.blog/tags/netcat/">netcat</a>
+    </li></ul>
+
+ <div class="pagination">
+  
+    <a class="pagination__item" href="https://wolverineav.blog/tech/kafka-tls-record-size-exceeded/">
+        <span class="pagination__label">Previous Post</span>
+        <span class="pagination__title">Kafka TLS Record Size Exceeded</span>
+    </a>
+  
+
+  
+</div>
+
+          <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "wolverineav" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          <footer class="post__footer">
+            
+
+
+<div class="social-icons">
+  
+     
+    
+      <a class="social-icons__link" title="Twitter"
+         href="https://twitter.com/wolverineav"
+         target="_blank" rel="noopener">
+        <div class="social-icons__icon" style="background-image: url('https://wolverineav.blog/svg/twitter.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a class="social-icons__link" title="GitHub"
+         href="https://github.com/wolverineav"
+         target="_blank" rel="noopener">
+        <div class="social-icons__icon" style="background-image: url('https://wolverineav.blog/svg/github.svg')"></div>
+      </a>
+    
+  
+     
+    
+  
+     
+    
+  
+     
+    
+  
+     
+    
+  
+     
+    
+      <a class="social-icons__link" title="LinkedIn"
+         href="https://www.linkedin.com/in/adityavaja/"
+         target="_blank" rel="noopener">
+        <div class="social-icons__icon" style="background-image: url('https://wolverineav.blog/svg/linkedin.svg')"></div>
+      </a>
+    
+  
+     
+    
+     
+</div>
+
+            <p>© 2020</p>
+          </footer>
+          </div>
+      </div>
+      
+      <div class="toc-container">
+          
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#is-zookeeper-getting-those-commands">Is Zookeeper getting those commands?</a></li>
+    <li><a href="#4lw-commands-do-not-work-consistently">4LW commands do not work consistently</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#add-delay-to-netcat-before-closing-the-channel">Add delay to netcat before closing the channel</a>
+      <ul>
+        <li><a href="#result">Result?</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </div>
+      
+    </div>
+    
+
+  </main>
+
+   
+
+  
+  <script src="/js/index.min.49e4d8a384357d9b445b87371863419937ede9fa77737522ffb633073aebfa44.js" integrity="sha256-SeTYo4Q1fZtEW4c3GGNBmTft6fp3c3Ui/7YzBzrr&#43;kQ=" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/components/prism-core.min.js"></script>
+
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js"
+    data-autoloader-path="https://unpkg.com/prismjs@1.20.0/components/"></script>
+
+  
+    <script src="/js/table-of-contents.js"></script>
+  
+
+
+</body>
+
+</html>

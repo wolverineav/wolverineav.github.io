@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>quickie on wolverineav</title>
+    <link>https://wolverineav.blog/tags/quickie/</link>
+    <description>Recent content in quickie on wolverineav</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© {year}</copyright>
+    <lastBuildDate>Fri, 24 Jul 2020 16:20:00 -0700</lastBuildDate>
+    
+	<atom:link href="https://wolverineav.blog/tags/quickie/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Zookeeper 4 Letter Word Netcat No Response</title>
+      <link>https://wolverineav.blog/tech/zookeeper-4-letter-word-netcat-no-response/</link>
+      <pubDate>Fri, 24 Jul 2020 16:20:00 -0700</pubDate>
+      
+      <guid>https://wolverineav.blog/tech/zookeeper-4-letter-word-netcat-no-response/</guid>
+      <description>Problem To report Zookeeper service health, we use the 4 letter word (4LW) command ruok and check that response is imok.
+netcat is the channel via which the message is sent.
+After upgrading the operating system from Ubuntu 16.04 to 18.04, we see that intermittently there is no response. Hmm&amp;hellip;
+Triage Is Zookeeper getting those commands? A simple bash script can be used to verify this:
+#!/bin/bash for i in {1.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -4,47 +4,67 @@
   
   <url>
     <loc>https://wolverineav.blog/</loc>
-    <lastmod>2020-07-14T18:08:16-07:00</lastmod>
+    <lastmod>2020-07-24T16:20:00-07:00</lastmod>
   </url>
   
   <url>
-    <loc>https://wolverineav.blog/tags/kafka/</loc>
-    <lastmod>2020-07-14T18:08:16-07:00</lastmod>
+    <loc>https://wolverineav.blog/tags/netcat/</loc>
+    <lastmod>2020-07-24T16:20:00-07:00</lastmod>
   </url>
   
   <url>
-    <loc>https://wolverineav.blog/tech/kafka-tls-record-size-exceeded/</loc>
-    <lastmod>2020-07-14T18:08:16-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://wolverineav.blog/tags/scale/</loc>
-    <lastmod>2020-07-14T18:08:16-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://wolverineav.blog/tags/ssl/</loc>
-    <lastmod>2020-07-14T18:08:16-07:00</lastmod>
+    <loc>https://wolverineav.blog/tags/quickie/</loc>
+    <lastmod>2020-07-24T16:20:00-07:00</lastmod>
   </url>
   
   <url>
     <loc>https://wolverineav.blog/tags/</loc>
-    <lastmod>2020-07-14T18:08:16-07:00</lastmod>
+    <lastmod>2020-07-24T16:20:00-07:00</lastmod>
   </url>
   
   <url>
     <loc>https://wolverineav.blog/tech/</loc>
-    <lastmod>2020-07-14T18:08:16-07:00</lastmod>
+    <lastmod>2020-07-24T16:20:00-07:00</lastmod>
   </url>
   
   <url>
     <loc>https://wolverineav.blog/tags/tech/</loc>
-    <lastmod>2020-07-14T18:08:16-07:00</lastmod>
+    <lastmod>2020-07-24T16:20:00-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://wolverineav.blog/tags/zookeeper/</loc>
+    <lastmod>2020-07-24T16:20:00-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://wolverineav.blog/tech/zookeeper-4-letter-word-netcat-no-response/</loc>
+    <lastmod>2020-07-24T16:20:00-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://wolverineav.blog/tags/kafka/</loc>
+    <lastmod>2020-07-14T16:20:00-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://wolverineav.blog/tech/kafka-tls-record-size-exceeded/</loc>
+    <lastmod>2020-07-14T16:20:00-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://wolverineav.blog/tags/scale/</loc>
+    <lastmod>2020-07-14T16:20:00-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://wolverineav.blog/tags/ssl/</loc>
+    <lastmod>2020-07-14T16:20:00-07:00</lastmod>
   </url>
   
   <url>
     <loc>https://wolverineav.blog/tags/tls/</loc>
-    <lastmod>2020-07-14T18:08:16-07:00</lastmod>
+    <lastmod>2020-07-14T16:20:00-07:00</lastmod>
   </url>
   
   <url>
