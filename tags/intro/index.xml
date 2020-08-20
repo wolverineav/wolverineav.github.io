@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© {year}</copyright>
-    <lastBuildDate>Sun, 12 Jul 2020 18:03:24 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 17 Aug 2020 16:20:00 -0700</lastBuildDate>
     
 	<atom:link href="https://wolverineav.blog/tags/intro/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,7 +15,7 @@
     <item>
       <title>Introduction</title>
       <link>https://wolverineav.blog/tech/introduction/</link>
-      <pubDate>Sun, 12 Jul 2020 18:03:24 -0700</pubDate>
+      <pubDate>Mon, 17 Aug 2020 16:20:00 -0700</pubDate>
       
       <guid>https://wolverineav.blog/tech/introduction/</guid>
       <description>I treat software development with the same approach that Don Norman would apply to everyday things 🙃
